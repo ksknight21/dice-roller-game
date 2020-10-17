@@ -8,17 +8,15 @@ function Game() {
     //**************************************//
     //Initialisation / Var Declaration
     //**************************************//
-    const [dieResult, setFirstDieResult] = useState(1);                 //Die Result
-    const dieImage = require(`../assets/${dieResult}.png`);             //Die Image
-
     //Player One
     const [turnScore, setTurnScore] = useState(0);                       //Turn Score
-    const [throwScore, setThrowScore] = useState(0);                     //Throw Score
+    const [throwScore, setThrowScore] = useState(1);                     //Throw Score
     const [maxDice, setMaxDice] = useState(10);                          //Max number of dice available to throw
     const [currentPlayer, setCurrentPlayer] = useState(1);               //Current Player
     const [bankOne, setBankOne] = useState(0);                           //Bank Score - Player One
     const [bankTwo, setBankTwo] = useState(0);                           //Bank Score - Player Two
     const [bank, setBank] = useState(0);                                 //Bank Score
+    const dieImage = require(`../assets/${throwScore}.png`);             //Die Image
 
     //Use effect to update state instantly for currentPlayer and bankscores.
     React.useEffect(() => {
@@ -52,7 +50,7 @@ function Game() {
 
             //Create random int between 1 and 6
             let calc = Math.floor(Math.random() * 6) + 1; 
-            setFirstDieResult(calc); //Update dieResult with generated int
+            setThrowScore(calc); //Update throwScore with generated int
 
             //Check that a 1 or 6 has not been rolled, as these won't count towards score
             if (calc != 1 && calc != 6) {
@@ -93,7 +91,6 @@ function Game() {
                 <div>Player: {currentPlayer}</div>
                 <div>Bank: {bank}</div>
                 <div>Turn Score: {turnScore}</div>
-                <div>Throw Score: {throwScore}</div>
                 <div>Die remaining: {maxDice}</div>
             </div>
         )
@@ -104,7 +101,7 @@ function Game() {
         setMaxDice(10);
         setIsToggled(!isToggled);
         setCurrentPlayer(!isToggled ? 1 : 2);
-        setThrowScore(0);
+        setThrowScore(1);
         setTurnScore(0);
     }
 
@@ -128,7 +125,7 @@ function Game() {
                 </div>
 
                 {/*Container for the die value*/}
-                <span data-status={dieResult} className="DieValue">{dieResult}</span>
+                <span data-status={throwScore} className="DieValue">{throwScore}</span>
 
                 {/*Buttons to either roll the dice or end the current players turn*/}
                 <span>
