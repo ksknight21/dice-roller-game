@@ -1,9 +1,33 @@
 import { propTypes } from 'formsy-react';
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import '../App.css';
+import axios from 'axios';
 
 function Game() {
 
+    axios.post('http://localhost:8080/api/v1/person', {
+        headers: {"Access-Control-Allow-Origin": "*",'Access-Control-Allow-Credentials':true},
+        name: "Kieran",
+        bank: 0,
+        throwScore: 0,
+        maxDice: 0,
+        turnScore: 0
+    })
+        .then((response) => {
+            console.log(response);
+        }, (error) => {
+            console.log(error);
+        });
+
+        axios.get('http://localhost:8080/api/v1/person', {
+            headers: {"Access-Control-Allow-Origin": "*",'Access-Control-Allow-Credentials':true},
+            name: "Kieran",
+        })
+            .then((response) => {
+                console.log(response);
+            }, (error) => {
+                console.log(error);
+            })
 
     //**************************************//
     //Initialisation / Var Declaration
@@ -21,19 +45,18 @@ function Game() {
     //Use effect to update state instantly for currentPlayer and bankscores.
     React.useEffect(() => {
         setCurrentPlayer(currentPlayer)
-        if(currentPlayer === 1){
-            setBankOne(bankOne)            
+        if (currentPlayer === 1) {
+            setBankOne(bankOne)
             setBank(bankOne)
         }
-        else{
-            setBankTwo(bankTwo)            
+        else {
+            setBankTwo(bankTwo)
             setBank(bankTwo)
         }
-    }, [bank,bankOne,bankTwo,currentPlayer]);
+    }, [bank, bankOne, bankTwo, currentPlayer]);
 
     //Toggle (To determine which players go it is)
     const [isToggled, setIsToggled] = React.useState(true);            //Var to determine which players go
-    const toggle = React.useCallback(() => setIsToggled(!isToggled));   //Logic to help set toggle
 
     //**************************************//
     //Functions
@@ -46,38 +69,38 @@ function Game() {
         setMaxDice(maxDice - 1);
 
         //Check if the player has any remaining dice
-        if (maxDice != 0) {
+        if (maxDice !== 0) {
 
             //Create random int between 1 and 6
-            let calc = Math.floor(Math.random() * 6) + 1; 
+            let calc = Math.floor(Math.random() * 6) + 1;
             setThrowScore(calc); //Update throwScore with generated int
 
             //Check that a 1 or 6 has not been rolled, as these won't count towards score
-            if (calc != 1 && calc != 6) {
+            if (calc !== 1 && calc !== 6) {
 
                 //Update throw score, turn score and the current players bank
                 setThrowScore(calc);
                 setTurnScore(turnScore + calc);
 
                 //Update the bank depending on the current player
-                if(currentPlayer===1){
+                if (currentPlayer === 1) {
                     setBankOne(bankOne + calc);
                     setBank(bankOne + calc);
                 }
-                else{
+                else {
                     setBankTwo(bankTwo + calc);
                     setBank(bankTwo + calc);
                 }
 
                 //If the players bank score (Inclusive of current throw) is 200+ then the player wins
-                if(bank + calc >= 200){
+                if (bank + calc >= 200) {
                     alert("Player " + currentPlayer + " has won the game");
                 }
-                
+
             }
         }
         //If no remaining die throws end, ask player to end their go.
-        else{
+        else {
             setMaxDice(0);
             alert("Your turn has ended, Please press End Turn");
         }
@@ -112,12 +135,12 @@ function Game() {
     return (
         <div>
 
-            
+
 
             {/*Store the game in a header*/}
             <header className="Game-Board">
 
-            <Player className="Player" data={currentPlayer} />
+                <Player className="Player" data={currentPlayer} />
 
                 {/*Container for the die image. Inline CSS*/}
                 <div style={{ display: 'flex', margin: 20 }}>
@@ -136,14 +159,6 @@ function Game() {
 
         </div>
     );
-}
-
-
-//Format numbers
-Game.propTypes = {
-    bank: propTypes.number,
-    throwScore: propTypes.number,
-    turnScore: propTypes.number
 }
 
 
