@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.UUID;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("api/v1/person")
 @RestController
 public class PersonController {
