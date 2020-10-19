@@ -11,10 +11,9 @@ function App() {
     <div className="WelcomeScreen">
        <Router>
           <Switch>
-              <Route path="/" exact component={WelcomeComponent} />
-              <Route path="/welcome" component={WelcomeComponent} />
+              <Route path="/" exact component={Game} />
               <Route path="/game" component={Game} />
-              <Route component={ErrorComponent} />
+              <Route component={Game} />
           </Switch>
       </Router>
     </div>

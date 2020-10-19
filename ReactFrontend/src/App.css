@@ -52,6 +52,8 @@
     width: 50px;
     height: 50px;
     margin: 10px;
+    display: inline-block;
+    position:absolute;
   }
   
   .button {
@@ -87,4 +89,19 @@
 
 .DieValue[data-status="6"]{
   color: red;
+}
+
+.DieValue{
+  position: relative;
+    top: 85px;
+}
+
+
+
+.allDie{
+  margin-bottom: 80px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
