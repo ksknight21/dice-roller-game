@@ -19,9 +19,8 @@ To run the spring boot application (API) you can use the [Spring Boot Maven plug
 ```shell
 cd %PATH%\SpringBootAPI
 mvn spring-boot:run
-
-(Where '%PATH%\' is where you have chosen to store the directory)
 ```
+(Where '%PATH%\' is where you have chosen to store the directory)
 
 ## Running the React Site locally
 
@@ -30,28 +29,29 @@ To run the React application you can use the [npm plugin] like so:
 ```shell
 cd %PATH%\ReactFrontend
 npm start
-
-(Where '%PATH%\' is where you have chosen to store the directory
 ```
+(Where '%PATH%\' is where you have chosen to store the directory)
 
 ## Using the application
 The application can do the following:
-	Each player has a “bank” score which starts at 0
-	On a player’s turn
-	“turn score” and “throw score” are 0, max dice is 10
-	they roll (up to) their max dice
-	all 1s and 6s are removed
-	all remaining dice values are added up to make a throw score
-	if the throw score is zero (there are no remaining dice)
-	the player’s turn score is wiped out
-	play passes to the next player
-	else
-	the throw score is added to the turn score
-	the max dice is reduced to only those which were not showing a 1 or a 6
-	the player may have another throw or end their turn
-	when a player ends their turn their turn score is added to their “bank” where the points are safe
-	Winner is the first to reach 200 points in the bank
+-Each player has a “bank” score which starts at 0
+-On a player’s turn
+-“turn score” and “throw score” are 0, max dice is 10
+-they roll (up to) their max dice
+-all 1s and 6s are removed
+-all remaining dice values are added up to make a throw score
+  -if the throw score is zero (there are no remaining dice)
+  -the player’s turn score is wiped out
+  -play passes to the next player
+-else
+  -the throw score is added to the turn score
+  -the max dice is reduced to only those which were not showing a 1 or a 6
+  -the player may have another throw or end their turn
+  -when a player ends their turn their turn score is added to their “bank” where the points are safe
+  -Winner is the first to reach 200 points in the bank
 
 See preview images:
+
 https://github.com/ksknight21/dice-roller-game/blob/main/React%20example.PNG
+
 https://github.com/ksknight21/dice-roller-game/blob/main/React%20example%202.PNG
