@@ -225,6 +225,10 @@ function Game() {
 
     }
 
+    const onChangeSlider = e => {
+        setMaxScore(parseInt(e.target.value, 10));
+      }
+
     //post player one and two into the api on initialisation
     post(1, bank, throwScore, maxDice, turnScore);
     post(2, bank, throwScore, maxDice, turnScore);
