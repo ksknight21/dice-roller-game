@@ -1,5 +1,5 @@
 import { propTypes } from 'formsy-react';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import '../App.css';
 import axios from 'axios';
 import Slider from './Slider';
@@ -25,7 +25,7 @@ function Game() {
 
     //Use effect to update state instantly (Effectively like did component update/mount etc...
     //Handler for when dieResults is updated
-    useEffect(() => {
+    useLayoutEffect(() => {
 
         //Update die Count to count for this roll
         var countOfOneAndSix = 0;
@@ -46,7 +46,7 @@ function Game() {
         setThrowScore(roundScore);
 
         //put data to API at this point, as this is where the component did update stage.
-        //put(currentPlayer, bank, throwScore, maxDice, turnScore);
+        put(currentPlayer, bank, turnScore, maxDice, turnScore);
 
     }, [dieResults]);
 
@@ -61,7 +61,18 @@ function Game() {
         }
 
         //put data to API at this point, as this is where the component did update stage.
-        put(currentPlayer, bank, throwScore, maxDice, turnScore);
+        put(currentPlayer, bank, turnScore, maxDice, turnScore);
+
+        //call api to get data. rolling dice in call so that we can use the response below
+        axios.get('http://localhost:8080/api/v1/person').then((response) => {
+
+            //Output the API data in console
+            console.log(response.data[0]);
+            console.log(response.data[1]);
+
+        }, (error) => {
+            console.log(error);
+        });
 
     }, [throwScore]);
 
@@ -81,7 +92,7 @@ function Game() {
         }
 
         //put data to API at this point, as this is where the component did update stage.
-        put(currentPlayer, bank, throwScore, maxDice, turnScore);
+        put(currentPlayer, bank, turnScore, maxDice, turnScore);
 
     }, [bankOne, bankTwo]);
 
@@ -97,45 +108,33 @@ function Game() {
     //Simulate rolling of the dice and game logic included.
     function rollDice() {
 
-        //call api to get data. rolling dice in call so that we can use the response below
-        let apiData = null;
-        axios.get('http://localhost:8080/api/v1/person', { name: currentPlayer }).then((response) => {
 
-            //Check if the player has any remaining dice
-            if (maxDice > 0) {
+        //Check if the player has any remaining dice
+        if (maxDice > 0) {
 
-                //create an array for each die result the player has available
-                let dieArray = [];
-                var i;
-                //First add how ever many die's the user has left
-                for (i = 0; i < maxDice; i++) {
-                    dieArray.push(Math.floor(Math.random() * 6) + 1);
-                }
-                //populate the rest of the array with zeroes
-                for (i = dieArray.length; i <= 10; i++) {
-                    dieArray.push(0);
-                }
-
-                //Update vars
-                setDieResults(dieArray);
-
+            //create an array for each die result the player has available
+            let dieArray = [];
+            var i;
+            //First add how ever many die's the user has left
+            for (i = 0; i < maxDice; i++) {
+                dieArray.push(Math.floor(Math.random() * 6) + 1);
             }
-            //If no remaining die throws end, ask player to end their go.
-            else {
-                setMaxDice(0);
-                alert("No remaining die left, you have lost your points");
-                setTurnScore(0);
+            //populate the rest of the array with zeroes
+            for (i = dieArray.length; i <= 10; i++) {
+                dieArray.push(0);
             }
 
-            //Output the API data in console
-            let apiDataPlayerOne = response.data[0];
-            let apiDataPlayerTwo = response.data[1];
-            console.log(apiDataPlayerOne);
-            console.log(apiDataPlayerTwo)
+            //Update vars
+            setDieResults(dieArray);
 
-        }, (error) => {
-            console.log(error);
-        });
+        }
+        //If no remaining die throws end, ask player to end their go.
+        else {
+            setMaxDice(0);
+            alert("No remaining die left, you have lost your points");
+            setTurnScore(0);
+        }
+
 
     }
 
@@ -155,7 +154,7 @@ function Game() {
 
         //Check if the player has any rolls left, if not then don't update bank
         if (maxDice > 0) {
-            
+
             if (currentPlayer == 1) {
                 setBankOne(bankOne + turnScore)
             } else {
@@ -193,6 +192,21 @@ function Game() {
 
     }
 
+    //Post method to post player stats
+    function deletePlayer(playerName) {
+        axios.delete('http://localhost:8080/api/v1/person/' + currentPlayer, {
+            headers: { "Access-Control-Allow-Origin": "*", 'Access-Control-Allow-Credentials': true },
+            name: playerName,
+        })
+            .then((response) => {
+                //console.log(response);
+            }, (error) => {
+                alert("Could not connect to API, see console for more detail");
+                console.log(error)
+            });
+
+    }
+
     //Get method to API to view current player stats
 
     //Put method to API to update current player stats
@@ -216,11 +230,13 @@ function Game() {
 
     const onChangeSlider = e => {
         setMaxScore(parseInt(e.target.value, 10));
-      }
+    }
 
     //post player one and two into the api on initialisation
     post(1, bank, throwScore, maxDice, turnScore);
     post(2, bank, throwScore, maxDice, turnScore);
+    put(1, bank, throwScore, maxDice, turnScore);
+    put(2, bank, throwScore, maxDice, turnScore);
 
     //**************************************//
     //Main Game Component
@@ -229,8 +245,8 @@ function Game() {
         <div>
 
             <div className="Banks">
-            <div className="Bank">Player 1 Bank: {bankOne}</div>
-            <div className="BankTwo">Player 2 Bank: {bankTwo}</div>
+                <div className="Bank">Player 1 Bank: {bankOne}</div>
+                <div className="BankTwo">Player 2 Bank: {bankTwo}</div>
             </div>
 
             {/*Store the game in a header*/}
