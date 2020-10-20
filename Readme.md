@@ -55,3 +55,16 @@ See preview images:
 https://github.com/ksknight21/dice-roller-game/blob/main/React%20example.PNG
 
 https://github.com/ksknight21/dice-roller-game/blob/main/React%20example%202.PNG
+
+## Notes
+Please note that while the API calls are successful they are not currently used to drive the game. This would be implemented with more time. The API data is simply output to the console at present. 
+
+## Learning Development
+This has been a huge learning curve for me and I have throughly enjoyed this exercise.
+I had prior knowledge of spring-boot but had never implemented anything using the framework, but did not find the implementation particularly challenging.
+The React Frontend was an entirely new experience for me. After some research I decided to use state hooks to update components due to their simplicity and ease.
+
+If you have any questions please contact me.
+
+Thanks.
+
