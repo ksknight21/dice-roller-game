@@ -2,18 +2,16 @@ package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.UUID;
-
 public class Person {
 
-    private final UUID id;
+    private final String id;
     private final String name;
     private final int bank;
     private final int throwScore;
     private final int maxDice;
     private final int turnScore;
 
-    public Person(@JsonProperty("id") UUID id,
+    public Person(@JsonProperty("id") String id,
                   @JsonProperty("name") String name,
                   @JsonProperty("bank") int bank,
                   @JsonProperty("throwScore") int throwScore,
@@ -27,7 +25,7 @@ public class Person {
         this.turnScore = turnScore;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 

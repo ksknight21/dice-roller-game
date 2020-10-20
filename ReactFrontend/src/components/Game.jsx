@@ -108,9 +108,13 @@ function Game() {
     //Simulate rolling of the dice and game logic included.
     function rollDice() {
 
+        console.log("ROLL")
+
         //call api to get data. rolling dice in call so that we can use the response below
         let apiData = null;
         axios.get('http://localhost:8080/api/v1/person', { name: currentPlayer }).then((response) => {
+
+            console.log("API")
 
             //Check if the player has any remaining dice
             if (maxDice > 0) {
@@ -241,6 +245,8 @@ function Game() {
 
             {/*Store the game in a header*/}
             <header className="Game-Board">
+
+                
 
                 {/*Slider for the max score*/}
                 <div className="App">

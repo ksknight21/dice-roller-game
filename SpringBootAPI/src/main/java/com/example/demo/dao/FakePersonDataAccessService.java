@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository("fakeDao")
 public class FakePersonDataAccessService implements PersonDao {
@@ -22,13 +21,13 @@ public class FakePersonDataAccessService implements PersonDao {
     }
 
     @Override
-    public int insertPerson(UUID id, Person person) {
+    public int insertPerson(String id, Person person) {
         DB.add(new Person(id, person.getName(), person.getBank(), person.getThrowScore(), person.getMaxDice(), person.getTurnScore()));
         return 1;
     }
 
     @Override
-    public int deletePersonById(UUID id) {
+    public int deletePersonById(String id) {
         Optional<Person> personMaybe = selectPersonById(id);
         if(personMaybe.isEmpty()){
             return 0;
@@ -38,7 +37,7 @@ public class FakePersonDataAccessService implements PersonDao {
     }
 
     @Override
-    public int updatePersonById(UUID id, Person update) {
+    public int updatePersonById(String id, Person update) {
         return selectPersonById(id)
                 .map(person -> {
                     int indexOfPersonToUpdate = DB.indexOf(person);
@@ -52,7 +51,7 @@ public class FakePersonDataAccessService implements PersonDao {
     }
 
     @Override
-    public Optional<Person> selectPersonById(UUID id) {
+    public Optional<Person> selectPersonById(String id) {
         return DB.stream()
                 .filter(person -> person.getId().equals(id))
                 .findFirst();

@@ -4,22 +4,35 @@ import com.example.demo.model.Person;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface PersonDao {
 
-    int insertPerson(UUID id, Person person);
+    int insertPerson(String id, Person person);
 
-    default int insertPerson(Person person){
-        UUID id = UUID.randomUUID();
-        return insertPerson(id,person);
+    default int insertPerson(Person person,List<Person> DB){
+        String id = person.getName();
+
+        //Check to see if the person already exists
+        boolean personExists = false;
+        for(Person per : DB){
+            String perName = per.getName();
+            if(perName.equals(person.getName())){
+                personExists = true;
+            }
+        }
+
+        //If person does not exist then add them
+        if(!personExists) {
+            return insertPerson(id,person);
+        }
+            return 0;
     }
 
-    int deletePersonById(UUID id);
+    int deletePersonById(String id);
 
-    int updatePersonById(UUID id, Person person);
+    int updatePersonById(String id, Person person);
 
-    Optional<Person> selectPersonById(UUID id);
+    Optional<Person> selectPersonById(String id);
 
     List<Person> selectAllPeople();
 }
