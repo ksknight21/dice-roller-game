@@ -56,11 +56,6 @@ function Game() {
         //Check if the player has dice remaining, because if not score doesnt count
         if (maxDice >= 0) {
             setTurnScore(turnScore + throwScore);
-            //Check if the bank + current turn score is more than the max score
-            if (bank + turnScore >= maxScore) {
-                alert("Player " + currentPlayer + " has won the game!");
-                setBank(bank + turnScore + throwScore);
-            }
         } else {
             setTurnScore(0);
         }
@@ -75,8 +70,14 @@ function Game() {
 
         if (currentPlayer == 1) {
             setBank(bankOne);
+            if (bankOne >= maxScore) {
+                alert("Player " + 1 + " has won the game!");
+            }
         } else {
             setBank(bankTwo);
+            if (bankTwo >= maxScore) {
+                alert("Player " + 2 + " has won the game!");
+            }
         }
 
         //put data to API at this point, as this is where the component did update stage.
@@ -84,18 +85,6 @@ function Game() {
 
     }, [bankOne, bankTwo]);
 
-    //Handler for when bank is updated
-    useEffect(() => {
-
-        //Check if the player has beat the goal score
-        if (bank >= maxScore) {
-            alert("Player " + currentPlayer + " has won the game!");
-        }
-
-        //put data to API at this point, as this is where the component did update stage.
-        put(currentPlayer, bank, throwScore, maxDice, turnScore);
-
-    }, [bank]);
 
 
     //Toggle (To determine which players go it is)
@@ -108,13 +97,9 @@ function Game() {
     //Simulate rolling of the dice and game logic included.
     function rollDice() {
 
-        console.log("ROLL")
-
         //call api to get data. rolling dice in call so that we can use the response below
         let apiData = null;
         axios.get('http://localhost:8080/api/v1/person', { name: currentPlayer }).then((response) => {
-
-            console.log("API")
 
             //Check if the player has any remaining dice
             if (maxDice > 0) {
@@ -159,7 +144,6 @@ function Game() {
         return (
             <div className="PlayerStats">
                 <div>Player: {currentPlayer}</div>
-                <div>Bank: {bank}</div>
                 <div>Turn Score: {turnScore}</div>
                 <div>Die remaining: {maxDice}</div>
             </div>
@@ -171,12 +155,13 @@ function Game() {
 
         //Check if the player has any rolls left, if not then don't update bank
         if (maxDice > 0) {
-            alert("Next players go");
+            
             if (currentPlayer == 1) {
                 setBankOne(bankOne + turnScore)
             } else {
                 setBankTwo(bankTwo + turnScore);
             }
+            alert("Next players go");
         } else {
             alert("You have run out of die, no score. Next players go");
         }
@@ -243,19 +228,22 @@ function Game() {
     return (
         <div>
 
+            <div className="Banks">
+            <div className="Bank">Player 1 Bank: {bankOne}</div>
+            <div className="BankTwo">Player 2 Bank: {bankTwo}</div>
+            </div>
+
             {/*Store the game in a header*/}
             <header className="Game-Board">
-
-                
 
                 {/*Slider for the max score*/}
                 <div className="App">
                     <div className="App-header">
-                        Score Goal:
+                        <div className="GoalScore">Goal Score:</div>
                         <Slider
-                            min={100}
+                            min={20}
                             max={1000}
-                            step={15}
+                            step={1}
                             defaultLength={maxScore}
                             value={maxScore}
                             onChangeValue={onChangeSlider}

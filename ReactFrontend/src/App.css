@@ -105,3 +105,30 @@
   flex-direction: row;
   justify-content: center;
 }
+
+.GoalScore{
+  flex-direction: column;
+    align-items: center;
+    text-align: center;
+    font-size: 23px;
+    margin-top: 30px;
+    
+}
+
+.Banks{
+  position: relative;
+  color: white;
+  font-size: 23px;;
+}
+
+.Bank{
+  position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.BankTwo{
+  position: absolute;
+    top: 0px;
+    right: 0px;
+}
